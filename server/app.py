@@ -1,7 +1,11 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from model.gemini_requests import Gemini
+from flask_cors import CORS
 
 app = Flask(__name__)
+
+CORS(app, resources={r"/content": {"origins": "http://localhost:3000"}})
+
 
 
 @app.route('/')
@@ -10,22 +14,19 @@ def hello_world():  # put application's code here
 
 
 @app.route('/content', methods=['GET'])
-def get_content(level=1):
-    nums = 40
-    prompts = "animal story, in json format of {\"content\": \"actual content\"} the key content is a must"
+def get_content():
+    level = request.args.get("level", default=1, type=int)
+    prompts = "generate animal story"
     match level:
         case 1:
             prompts += " with exactly 40 words length"
-            gemini = Gemini(prompts)
-            response = gemini.get_response()
-            return response
         case 2:
             prompts += " with exactly 80 words length"
-            gemini = Gemini(prompts)
-            response = gemini.get_response()
-            return response
 
-    return jsonify("{'content': \"actual content\"}")
+    gemini = Gemini(prompts)
+    response = gemini.get_response()
+
+    return jsonify(response)
 
 
 if __name__ == '__main__':

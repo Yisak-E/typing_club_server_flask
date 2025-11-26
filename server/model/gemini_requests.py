@@ -17,9 +17,13 @@ class Gemini:
     def get_response(self):
         try:
             response = model.generate_content(self.prompt)
-            return jsonify(response)
+
+            if hasattr(response, "text"):
+                return {"content": response.text}
+            else:
+                return {"content": str(response)}
         except Exception as e:
-            return jsonify({"error": "Something went wrong."}, error=e)
+            return jsonify({"error": f"Something went wrong. {str(e)}"})
         return None
 
 
