@@ -10,7 +10,7 @@ CORS(app, resources={r"/content": {"origins": "http://localhost:3000"}})
 
 @app.route('/')
 def hello_world():  # put application's code here
-    return render_template("../static/index.html")
+    return render_template("index.html")
 
 
 @app.route('/content', methods=['GET'])
