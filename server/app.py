@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 from model.gemini_requests import Gemini
 from flask_cors import CORS
 
@@ -10,7 +10,7 @@ CORS(app, resources={r"/content": {"origins": "http://localhost:3000"}})
 
 @app.route('/')
 def hello_world():  # put application's code here
-    return 'Hello World!'
+    return render_template("../static/index.html")
 
 
 @app.route('/content', methods=['GET'])
